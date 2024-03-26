@@ -18,9 +18,11 @@ We have designed a simple protocol to facilitate communication between the route
 ```
 
 ## Key Points
-**ProjectID** and **projectVersion** align with W3bstream's messaging protocol.
-**Data**: Contains the actual message, including device ID and connections count.
-**Note**:  Currently, W3bstream does not support the concept of device IDs within its protocol, meaning that no device authentication or data integrity checks are performed by W3bstream nodes. Although we include the Device ID within the message payload for later processing in the prover, practical device authentication by ZK is not feasible, and thus, this feature has been omitted. Leveraging the flexibility of the Risc Zero proving framework, we extract device IDs in the prover's result and use them on-chain to find the device owner. However, it's important to note that no digital signatures on the data messages are utilized at any point.
+- **ProjectID** and **projectVersion** align with W3bstream's messaging protocol.
+  
+- **Data**: Contains the actual message, including device ID and connections count.
+  
+- **Note**:  Currently, W3bstream does not support the concept of device IDs within its protocol, meaning that no device authentication or data integrity checks are performed by W3bstream nodes. Although we include the Device ID within the message payload for later processing in the prover, practical device authentication by ZK is not feasible, and thus, this feature has been omitted. Leveraging the flexibility of the Risc Zero proving framework, we extract device IDs in the prover's result and use them on-chain to find the device owner. However, it's important to note that no digital signatures on the data messages are utilized at any point.
 
 
 ## Setting up your environment
