@@ -10,7 +10,7 @@ We have designed a simple protocol to facilitate communication between the route
   "projectID": 33,
   "projectVersion": "0.1",
   "data": {
-    "device_id": "1",
+    "client_id": "1",
     "connections": 3,
     "receipt_type": "Snark"
   }

@@ -16,7 +16,7 @@ fn main() {
     for _ in 0..TASK_SIZE {
         // Create a new message struct
         let message = DeviceMessage {
-            device_id: rand::thread_rng().gen_range(0..3) as u64,
+            client_id: rand::thread_rng().gen_range(0..3) as u64,
             connections: rand::thread_rng().gen_range(0..4) as u64,
         };
 

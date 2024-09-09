@@ -11,12 +11,12 @@ TOTAL_LINES=$(($(wc -l < "$CSV_FILE") - 1))
 CURRENT_LINE=0
 
 # Skip the header line
-tail -n +2 "$CSV_FILE" | while IFS=, read -r device_id connections; do
+tail -n +2 "$CSV_FILE" | while IFS=, read -r client_id connections; do
   # Increment the current line counter
   ((CURRENT_LINE++))
 
   # Construct the JSON data
-  JSON_DATA="{\"device_id\":$device_id,\"connections\":$connections,\"receipt_type\":\"Snark\"}"
+  JSON_DATA="{\"client_id\":$client_id,\"connections\":$connections,\"receipt_type\":\"Snark\"}"
   echo $JSON_DATA
 
   # Execute your command here, replace the actual JSON data with the constructed one

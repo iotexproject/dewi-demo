@@ -46,7 +46,7 @@ Below is a high level description of the end-to-end data flow:
 
 ![image](./docs/images/flow-2.png)
 
-3. The prover iterates over the whole block of messages and computes a score for each device id that accounts for its "work". In this demo the score is calculated as "1" score point for proof of liveness 8i.e. for each message), plus `N` where `N`is the the number of WiFi clients connected in that 7-seconds slot message. The result is a mapping device_id => score and the ZK proof of the computaion which is returned to the sequencer:
+3. The prover iterates over the whole block of messages and computes a score for each device id that accounts for its "work". In this demo the score is calculated as "1" score point for proof of liveness 8i.e. for each message), plus `N` where `N`is the the number of WiFi clients connected in that 7-seconds slot message. The result is a mapping client_id => score and the ZK proof of the computaion which is returned to the sequencer:
    
 ![image](./docs/images/flow-3.png)
 
@@ -64,7 +64,7 @@ Below is a high level description of the end-to-end data flow:
 
 7. Upon successful proof verification, the receiver contract will implemet a basic rewards distribution logic by processing the prover output. 
 
-It simply looks up each device_id's owner in the device registry, and distributes as many "RewardTokens" as indicated by the `Score` value.
+It simply looks up each client_id's owner in the device registry, and distributes as many "RewardTokens" as indicated by the `Score` value.
 
 ![image](./docs/images/flow-7.png)
 

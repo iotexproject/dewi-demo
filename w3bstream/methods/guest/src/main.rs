@@ -19,7 +19,7 @@ fn main() {
          let message: DeviceMessage = serde_json::from_str(data).expect("Failed to deserialize message");
 
          // Calculate the rewards
-         let reward = rewards_map.entry(message.device_id).or_insert(0 as u64);
+         let reward = rewards_map.entry(message.client_id).or_insert(0 as u64);
          *reward = *reward + BASE_REWARD + message.connections * REWARD_PER_CONNECTION;
     }
 
