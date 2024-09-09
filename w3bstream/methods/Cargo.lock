@@ -116,6 +116,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "dewi-demo-methods"
+version = "0.1.0"
+dependencies = [
+ "risc0-build",
+]
+
+[[package]]
 name = "digest"
 version = "0.10.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -163,13 +170,6 @@ checksum = "85649ca51fd72272d7821adaf274ad91c288277713d9c18820d8499a7ff69e9a"
 dependencies = [
  "typenum",
  "version_check",
-]
-
-[[package]]
-name = "dewi-demo-methods"
-version = "0.1.0"
-dependencies = [
- "risc0-build",
 ]
 
 [[package]]

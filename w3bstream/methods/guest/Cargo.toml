@@ -6,7 +6,7 @@ edition = "2021"
 [workspace]
 
 [dependencies]
-risc0-zkvm = { path = "../../../../risc0/risc0/zkvm", default-features = false, features = ["std"] }
+risc0-zkvm = { path = "../../../../../risc0/risc0/zkvm", default-features = false, features = ["std"] }
 dewi-core = { path = "../../core" }
 sha2 = "0.10.6"
 geoutils = "0.5.1"
