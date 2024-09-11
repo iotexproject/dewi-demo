@@ -1,13 +1,13 @@
 // Define the message type
 
 use serde::{Serialize, Deserialize};
-pub const TASK_SIZE: usize = 10;
+pub const TASK_SIZE: usize = 1;
 pub const BASE_REWARD: u64 = 1;
 pub const REWARD_PER_CONNECTION: u64 = 1;
 
 #[derive(Serialize, Deserialize)]
 pub struct DeviceMessage {
-    pub client_id: u64,
+    pub client_id: String,
     pub connections: u64
 }
 
