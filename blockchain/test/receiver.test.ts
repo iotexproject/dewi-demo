@@ -2,7 +2,7 @@ import { expect } from 'chai';
 import { ethers } from 'hardhat';
 import { loadFixture } from '@nomicfoundation/hardhat-toolbox/network-helpers';
 
-import { DeviceNFTMock, DeviceReward, IoIDStoreMock, RiscZeroGroth16Verifier, WSReceiver } from '../typechain-types';
+import { DeviceNFT, DeviceReward, IoIDStoreMock, RiscZeroGroth16Verifier, WSReceiver } from '../typechain-types';
 import { IMAGE_ID, IMAGE_ID_2, RAW_DATA } from './testData';
 import { IoIDMock } from '../typechain-types/contracts/mock/IoIDMock.sol';
 
@@ -172,7 +172,7 @@ const deployIoIDStore = async () => {
 };
 
 const deployDeviceNFT = async () => {
-  const factory = await ethers.getContractFactory('DeviceNFTMock');
+  const factory = await ethers.getContractFactory('DeviceNFT');
   return factory.deploy();
 };
 
@@ -197,13 +197,13 @@ const setupIoID = async (receiver: WSReceiver) => {
   const ioidStore = await setDeviceContract(receiver, deviceNft);
   const wallet = await deployDeviceWallet();
   // MINT DEVICE NFT 0 TO THE DEVICE WALLET
-  await deviceNft.mint(wallet);
+  await deviceNft.mint(wallet, 0);
   const ioid = await mintIoIDToOwner(receiver);
 
   return { store: ioidStore, token: ioid };
 };
 
-const setDeviceContract = async (receiver: WSReceiver, deviceNft: DeviceNFTMock) => {
+const setDeviceContract = async (receiver: WSReceiver, deviceNft: DeviceNFT) => {
   const ioidStoreAddr = await receiver.ioIDStore();
   const ioidStore = await ethers.getContractAt('IoIDStoreMock', ioidStoreAddr);
   await ioidStore.setDeviceContract(PROJECT_1_ID, deviceNft);
