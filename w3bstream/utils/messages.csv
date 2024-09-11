@@ -1,4 +1,4 @@
-device_id,signature,latitude,longitude,receipt_type
+client_id,signature,latitude,longitude,receipt_type
 0,0,46,10,Snark
 1,0,52,10,Snark
 2,0,43,13,Snark

@@ -4,7 +4,7 @@ import numpy as np
 
 # Generating 100 random records
 data_100 = {
-    "device_id": np.random.randint(0, 4, size=100),
+    "client_id": np.random.randint(0, 4, size=100),
     "connections": np.random.randint(0, 6, size=100)
 }
 
