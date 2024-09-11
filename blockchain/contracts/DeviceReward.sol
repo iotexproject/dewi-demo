@@ -4,7 +4,9 @@ pragma solidity ^0.8.19;
 import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/access/AccessControl.sol";
 
-contract DeviceReward is ERC20, AccessControl {
+import {IDeviceReward} from "./interfaces/IDeviceReward.sol";
+
+contract DeviceReward is IDeviceReward, ERC20, AccessControl {
     bytes32 public constant MINTER_ROLE = keccak256("MINTER_ROLE");
 
     constructor() ERC20("DeviceReward", "DRW") {
