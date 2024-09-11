@@ -8,17 +8,17 @@ const IOID_STORE = '0x60cac5CE11cb2F98bF179BE5fd3D801C3D5DBfF2';
 const PROJECT_1_ID = '0x036c';
 const IMAGE_ID = '0xc4b0c497db7be05c23b0aacfbd0d4beebe109f94c64599c3b1265fa1d7a083ce';
 
-export default buildModule('WSReceiver', m => {
+export default buildModule('Dapp', m => {
   const rewards = m.contract('DeviceReward');
   const MINTER_ROLE = m.staticCall(rewards, 'MINTER_ROLE');
 
-  const receiver = m.contract('WSReceiver', [VERIFIER, rewards, IOID_ADDR, IOID_STORE], {
+  const dapp = m.contract('Dapp', [VERIFIER, rewards, IOID_ADDR, IOID_STORE], {
     after: [rewards],
   });
 
-  m.call(receiver, 'setProjectIdToImageId', [PROJECT_1_ID, IMAGE_ID]);
+  m.call(dapp, 'setProjectIdToImageId', [PROJECT_1_ID, IMAGE_ID]);
 
-  m.call(rewards, 'grantRole', [MINTER_ROLE, receiver]);
+  m.call(rewards, 'grantRole', [MINTER_ROLE, dapp]);
 
-  return { receiver };
+  return { dapp };
 });

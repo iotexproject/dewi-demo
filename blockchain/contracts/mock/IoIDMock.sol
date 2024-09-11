@@ -11,12 +11,9 @@ contract IoIDMock is IioID, ERC721EnumerableUpgradeable {
 
     function wallet(uint256 _id) external view override returns (address wallet_, string memory did_) {}
 
-    function mint(uint256 _projectId, address _device, address _owner) external override returns (uint256) {
-        return _mint(_projectId, _device, _owner);
-    }
-
-    function _mint(uint256 _projectId, address _device, address _owner) internal returns (uint256 id_) {
+    function mint(uint256, address, address _owner) external override returns (uint256) {
         _mint(_owner, 3);
+        return 3;
     }
 
     function removeDID(address _device) external {}
