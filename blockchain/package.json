@@ -13,7 +13,7 @@
     "lint:js:fix": "prettier --log-level warn --ignore-path .gitignore '**/*.{js,ts}' --write && eslint --ignore-path .gitignore . --fix",
     "lint:sol": "prettier --log-level warn --ignore-path .gitignore '{contracts,test}/**/*.sol' --check && solhint '{contracts,test}/**/*.sol'",
     "lint:sol:fix": "prettier --log-level warn --ignore-path .gitignore '{contracts,test}/**/*.sol' --write",
-    "deploy-receiver": "npx hardhat ignition deploy ignition/modules/Receiver.ts",
+    "deploy-dapp": "npx hardhat ignition deploy ignition/modules/Dapp.ts",
     "deploy-device-nft": "npx hardhat ignition deploy ignition/modules/DeviceNFT.ts"
   },
   "devDependencies": {
