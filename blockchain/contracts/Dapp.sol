@@ -88,7 +88,6 @@ contract Dapp is IDapp {
         require(projectDeviceContract != address(0), "Device Contract not set");
 
         address ownerOfDeviceToken = IERC721(projectDeviceContract).ownerOf(_deviceId);
-        // return ownerOfDeviceToken;
         IERC6551Account wallet = IERC6551Account(payable(ownerOfDeviceToken));
         (, , uint256 tokenId) = wallet.token();
 
