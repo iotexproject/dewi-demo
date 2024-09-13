@@ -1,15 +1,9 @@
-# WS DApp
-
-A decentralized application integrating WS rewards and Device NFTs, designed to process ZK proofs and distribute rewards to device owners.
-
-## Overview
-
-The WS DApp is a blockchain-based application that processes ZK proofs sent from W3bstream. Based on the provided `projectId`, the WSRouter identifies the appropriate WS DApp and forwards the proof to it. The WS DApp then processes the proof, identifies device owners, and distributes rewards accordingly.
-
-This system ensures secure, transparent, and efficient distribution of rewards to device owners while maintaining data privacy through zero-knowledge proofs.
+# IoTeX DeWi Demo - Smart Contracts
 
 ## Table of Contents
 
+- [Overview of Contracts](#overview-of-contracts)
+- [Token Incentive Economy](#token-incentive-economy)
 - [Prerequisites](#prerequisites)
 - [Installation](#installation)
 - [Quickstart](#quickstart)
@@ -19,8 +13,16 @@ This system ensures secure, transparent, and efficient distribution of rewards t
 - [Testing](#testing)
 - [Deployment](#deployment)
 - [Sending Proof On-Chain](#sending-proof-on-chain)
-- [Architecture](#architecture)
-- [License](#license)
+
+## Overview of Contracts
+
+- **Dapp**: The core DeWi application that receives and verifies device work proofs from W3bstream. It interacts with ioID contracts to facilitate infrastructure rewards distribution.
+- **DeviceNFT**: A customizable NFT contract that tokenizes devices on-chain. In this implementation, each device's serial number is minted as the token ID.
+- **DeviceReward**: An ERC20 token contract used to incentivize device owners for building and maintaining the network infrastructure.
+
+## Token Incentive Economy
+
+The token economy is straightforward: each access point sends a message every 5 seconds to prove it's "online." The message will also include the number of unique clients connected during that interval. W3bstream processes these messages to compute an "Index of Physical Work" for each device: 1 point for being online and 1 point for each unique client served. The Index of Work, along with a ZK proof of the computation, is sent to the Dapp, which verifies the proof and distributes token rewards to device owners at a 1:1 ratio (tokens:work).
 
 ## Prerequisites
 
@@ -97,4 +99,3 @@ Replace `testnet` with your target network if different.
 ## Sending Proof On-Chain
 
 After deploying the contracts, send the ZK proof on-chain to initiate the reward distribution process. The W3bstream sends a ZK proof to the `WSRouter`, which, based on the `projectId`, forwards it to the appropriate `WSDapp`. The `WSDapp` processes the proof, identifies the device owners via their Device NFTs, and distributes the rewards through the `DeviceRewards` contract.
-
