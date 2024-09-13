@@ -58,8 +58,8 @@ const char* ESP32_SSID = "DEPIN-AP-0";
 // const char* ESP32_SSID = "DEPIN-AP-3"; 
 
 // Variables to store the connected clients
-connected_device_t wifi_clients[MAX_wifi_clients];
-int num_wifi_clients = 0;
+connected_device_t connected_devices[MAX_CONNECTED_DEVICES];
+int num_connected_devices = 0;
 
 void update_clients(int count)
 {
@@ -215,7 +215,7 @@ void update_display()
     if (balance != previous_balance)
     {
         ESP_LOGI("UPDATE_DISPLAY>", "Balance: %" PRIu64, balance);
-        ESP_LOGI("UPDATE_DISPLAY>", "Clients: %d", num_wifi_clients);
+        ESP_LOGI("UPDATE_DISPLAY>", "Clients: %d", num_connected_devices);
 
         previous_balance = balance;
         #ifdef DISABLE_DISPLAY
@@ -223,7 +223,7 @@ void update_display()
         #endif
         update_balance(balance);
     }
-    update_clients(num_wifi_clients);
+    update_clients(num_connected_devices);
 }
 
 void send_message()
