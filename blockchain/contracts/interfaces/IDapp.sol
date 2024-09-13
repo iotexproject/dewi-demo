@@ -2,12 +2,6 @@
 pragma solidity ^0.8.19;
 
 interface IDapp {
-    error VerifierNotSet();
-    error VerificationFailed();
-    error ImageIdNotFound(uint256 projectId);
-    error DeviceIsNotEnabled(uint256);
-    error DeviceContractNotSet(uint256);
-
     event ProofVerified(address indexed sender, bytes32 imageId, bytes32 proof_journal_hash);
     event RewardsDistributed(address indexed owner, uint256 reward);
 

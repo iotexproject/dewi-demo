@@ -28,13 +28,10 @@ contract Dapp is IDapp {
     }
 
     function process(uint256 _projectId, uint256, string memory, bytes calldata _data) external {
-        if (address(risc0Verifier) == address(0)) {
-            revert VerifierNotSet();
-        }
+        require(address(risc0Verifier) != address(0), "Verifier not set");
+
         bytes32 imageId = projectIdToImageId[_projectId];
-        if (imageId == bytes32(0)) {
-            revert ImageIdNotFound(_projectId);
-        }
+        require(imageId != bytes32(0), "Image not found");
 
         (bytes memory seal, bytes memory journal) = _decodeData(_data);
         _verify(seal, imageId, journal);
@@ -88,11 +85,10 @@ contract Dapp is IDapp {
 
     function _getDeviceOwner(uint256 _projectId, uint256 _deviceId) internal view returns (address) {
         address projectDeviceContract = ioIDStore.projectDeviceContract(_projectId);
-        if (projectDeviceContract == address(0)) {
-            revert DeviceContractNotSet(_projectId);
-        }
+        require(projectDeviceContract != address(0), "Device Contract not set");
 
         address ownerOfDeviceToken = IERC721(projectDeviceContract).ownerOf(_deviceId);
+        // return ownerOfDeviceToken;
         IERC6551Account wallet = IERC6551Account(payable(ownerOfDeviceToken));
         (, , uint256 tokenId) = wallet.token();
 
