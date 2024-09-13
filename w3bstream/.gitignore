@@ -1,1 +1,5 @@
+# Ignore bilds
 target/
+
+# Ignore local device owners test accounts
+devices.local

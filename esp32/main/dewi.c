@@ -22,7 +22,7 @@ const char* url = "sprout-stress.w3bstream.com/message";
 const int project_id = 884;
 
 // The token contract address, used for DePIN infra incentives
-const char* token_contract = "0xff94dea0be4fc5289cb60f63d55eaff71b3e9666";
+const char* token_contract = "0xB1f2d24F82e114bD44AF492E7ead45003DBb51d6";
 
 // The interval for sending updates
 // TODO: The contract should not reward updates more frequent than 
@@ -30,14 +30,15 @@ const char* token_contract = "0xff94dea0be4fc5289cb60f63d55eaff71b3e9666";
 // in the incentives contract.
 const uint32_t update_interval_ms = 5000;
 
-// Info for Device 0
 // TODO: The owner address should be obtained from the ioID device registration
-const char* owner = "0x1435fc1a9170f15d708fb837d0f8b8f06e8f16e6";
-const char* owner_short = "0x1435..f16e6";
-// This can be the DID itself or any custom serial number or identifier. 
-// This is minted as the Device NFT for device tokenization.
+// client_id can be the DID itself or any custom serial number or identifier. 
+// It is minted as the Device NFT for device tokenization.
+
+// Info for Device 0
+const char* owner = "0x837816467573afc94b3bdd6bc68ab37cc71325f6";
+const char* owner_short = "0x8378..325f6";
 const char* client_id = "0"; 
-const char* ESP32_SSID = "DEPIN-AP-0";
+const char* ESP32_SSID = "DEPIN-AP-0"; 
 
 // Info for Device 1
 // const char* owner = "0xc7c415f50829c1f696fb7c16df3635262bf99193";
@@ -46,14 +47,14 @@ const char* ESP32_SSID = "DEPIN-AP-0";
 // const char* ESP32_SSID = "DEPIN-AP-1"; 
 
 // Info for Device 2
-// const char* owner = "0x09bb7706adaf412f17da5ab61036df966d96413c";
-// const char* owner_short = "0x09bb..6413c";
-// const char* client_id = "2"
+// const char* owner = "0x199f87e13fa62c344e845139d706461f3f0cc030";
+// const char* owner_short = "0x199f..cc030";
+// const char* client_id = "2";
 // const char* ESP32_SSID = "DEPIN-AP-2";
 
 // Info for Device 3
-// const char* owner = "0xbcafe1986bb8130bea04de6c7482ba37dad77fbd";
-// const char* owner_short = "0xbcaf..77fbd";
+// const char* owner = "0xf3c4b4d9714c88cd4c768975108eacf27f3a0138";
+// const char* owner_short = "0xf3c4..a0138";
 // const char* client_id = "3";
 // const char* ESP32_SSID = "DEPIN-AP-3"; 
 
