@@ -29,7 +29,7 @@ The token economy is straightforward: each access point sends a message every 5 
 Before you begin, ensure you have the following installed:
 
 - **Node.js** (v18.x or later)
-- **npm** (Node Package Manager)
+- **yarn** (Yarn Package Manager)
 - **Hardhat**: Ethereum development environment
 
 ## Installation
@@ -39,7 +39,7 @@ Clone the repository and install the necessary dependencies:
 ```bash
 git clone https://github.com/iotexproject/dewi-demo.git
 cd blockchain
-npm install
+yarn install
 ```
 
 ## Quickstart
@@ -61,7 +61,7 @@ Edit the `.env` file to include your environment-specific variables.
 Compile the smart contracts and run the test suite:
 
 ```bash
-npm run test
+yarn test
 ```
 
 ## Adjusting Smart Contracts
@@ -79,7 +79,7 @@ Make the necessary changes in these files to implement your desired functionalit
 After adjusting the smart contracts, re-run the tests to ensure everything works correctly:
 
 ```bash
-npm run test
+yarn test
 ```
 
 All tests should pass before proceeding to deployment.
@@ -91,7 +91,7 @@ Deploy the smart contracts to the testnet using Hardhat Ignition with the follow
 ```bash
 npx hardhat ignition deploy ignition/modules/DeviceNFT.ts --network testnet
 npx hardhat ignition deploy ignition/modules/DeviceRewards.ts --network testnet
-npx hardhat ignition deploy ignition/modules/WSDapp.ts --network testnet
+npx hardhat ignition deploy ignition/modules/Dapp.ts --network testnet
 ```
 
 Replace `testnet` with your target network if different.
