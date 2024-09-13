@@ -10,47 +10,56 @@ static const char *TAG = "DeWi";
 extern uint16_t connect_count;
 
 // The DID token to communicate with the server
+// TODO: Integrate DID token generation with ioConnect + ioID SDK
+// Ref. Examples: https://github.com/iotexproject/ioConnect/tree/main/example/esp32
 const char* did_token = "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2pQMlBhMXBrVWd6MnJQNnlUWHBBVGU0cWQ3YWh3c0dBUXVVNjk3SnBjQ0xmI3o2TWtqUDJQYTFwa1VnejJyUDZ5VFhwQVRlNHFkN2Fod3NHQVF1VTY5N0pwY0NMZiJ9.eyJpc3MiOiJkaWQ6a2V5Ono2TWtqUDJQYTFwa1VnejJyUDZ5VFhwQVRlNHFkN2Fod3NHQVF1VTY5N0pwY0NMZiIsIm5iZiI6MTU5Nzg3MzMxMCwianRpIjoiaHR0cDovL2V4YW1wbGUub3JnL2NyZWRlbnRpYWxzLzM3MzEiLCJzdWIiOiJkaWQ6a2V5Ono2TWtlZUNoclVzMUVvS2tOTnpveTlGd0pKYjlnTlE5MlVUOGtjWFpITWJ3ajY3QiIsInZjIjp7IkBjb250ZXh0IjoiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiLCJpZCI6Imh0dHA6Ly9leGFtcGxlLm9yZy9jcmVkZW50aWFscy8zNzMxIiwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa2VlQ2hyVXMxRW9La05Oem95OUZ3SkpiOWdOUTkyVVQ4a2NYWkhNYndqNjdCIn0sImlzc3VlciI6ImRpZDprZXk6ejZNa2pQMlBhMXBrVWd6MnJQNnlUWHBBVGU0cWQ3YWh3c0dBUXVVNjk3SnBjQ0xmIiwiaXNzdWFuY2VEYXRlIjoiMjAyMC0wOC0xOVQyMTo0MTo1MFoifX0.4dzsQ89P6A8NUy5qpdAohCbNRCRMnplrtiYaEpPvTeU9nzyrKGAPG-bQukI2Jzv2f289lWDx0fdWxWJjSgieDA";
 
-// The URL of the server
-const char* url = "https://sprout-stress.w3bstream.com/message";
+// The URL of the W3bstream sequencer
+const char* url = "sprout-stress.w3bstream.com/message";
 
-// The project id
-const int project_id = 33;
+// The W3bstream Project id as created in ioID
+// ioctl ioid register $PROJECT_NAME
+const int project_id = 884;
 
-// The token contract address
+// The token contract address, used for DePIN infra incentives
 const char* token_contract = "0xff94dea0be4fc5289cb60f63d55eaff71b3e9666";
 
 // The interval for sending updates
-const uint32_t update_interval_ms = 7000;
+// TODO: The contract should not reward updates more frequent than 
+// a preset interval, e.g. 5 seconds. Currently this is not implemented
+// in the incentives contract.
+const uint32_t update_interval_ms = 5000;
 
-// Device info 0
+// Info for Device 0
+// TODO: The owner address should be obtained from the ioID device registration
 const char* owner = "0x1435fc1a9170f15d708fb837d0f8b8f06e8f16e6";
 const char* owner_short = "0x1435..f16e6";
-const char* device_id = "0";
-const char* ESP32_SSID = "DeWi-Device-0";
+// This can be the DID itself or any custom serial number or identifier. 
+// This is minted as the Device NFT for device tokenization.
+const char* client_id = "0"; 
+const char* ESP32_SSID = "DEPIN-AP-0";
 
-// // Device info 1
+// Info for Device 1
 // const char* owner = "0xc7c415f50829c1f696fb7c16df3635262bf99193";
 // const char* owner_short = "0xc7c41..99193";
-// const char* device_id = "1";
-// const char* ESP32_SSID = "DeWi-Device-1"; 
+// const char* client_id = "1";
+// const char* ESP32_SSID = "DEPIN-AP-1"; 
 
-// // Device info 2
+// Info for Device 2
 // const char* owner = "0x09bb7706adaf412f17da5ab61036df966d96413c";
 // const char* owner_short = "0x09bb..6413c";
-// const char* device_id = "2"
-// const char* ESP32_SSID = "DeWi-Device-2";
+// const char* client_id = "2"
+// const char* ESP32_SSID = "DEPIN-AP-2";
 
-// // Device info 3
+// Info for Device 3
 // const char* owner = "0xbcafe1986bb8130bea04de6c7482ba37dad77fbd";
 // const char* owner_short = "0xbcaf..77fbd";
-// const char* device_id = "3";
-// const char* ESP32_SSID = "DeWi-Device-3"; 
+// const char* client_id = "3";
+// const char* ESP32_SSID = "DEPIN-AP-3"; 
 
 // Variables to store the connected clients
-connected_device_t connected_devices[MAX_CONNECTED_DEVICES];
-int num_connected_devices = 0;
+connected_device_t wifi_clients[MAX_wifi_clients];
+int num_wifi_clients = 0;
 
 void update_clients(int count)
 {
@@ -189,7 +198,7 @@ void init_display()
     LCD_clearScreen();
     LCD_setCursor(0, 0);
     char line[20];
-    sprintf(line, "WiFi: %s", ESP32_SSID);
+    sprintf(line, "SSID: %s", ESP32_SSID);
     LCD_writeStr(line);
     LCD_setCursor(0, 2);
     sprintf(line, "Owner: %s", owner_short);
@@ -206,7 +215,7 @@ void update_display()
     if (balance != previous_balance)
     {
         ESP_LOGI("UPDATE_DISPLAY>", "Balance: %" PRIu64, balance);
-        ESP_LOGI("UPDATE_DISPLAY>", "Clients: %d", num_connected_devices);
+        ESP_LOGI("UPDATE_DISPLAY>", "Clients: %d", num_wifi_clients);
 
         previous_balance = balance;
         #ifdef DISABLE_DISPLAY
@@ -214,7 +223,7 @@ void update_display()
         #endif
         update_balance(balance);
     }
-    update_clients(num_connected_devices);
+    update_clients(num_wifi_clients);
 }
 
 void send_message()
@@ -242,7 +251,7 @@ void send_message()
     // Construct JSON payload
     char payload[1024] = {0};  // Adjust size as needed
     // snprintf(payload, sizeof(payload), "{\"projectID\":15,\"projectVersion\":\"0.1\",\"data\":\"{\\\"devicesConnected\\\":%d}\"}", connect_count);
-    snprintf(payload, sizeof(payload), "{\"projectID\":%d,\"projectVersion\":\"0.1\",\"data\":\"{\\\"device_id\\\":%s,\\\"connections\\\":%d, \\\"receipt_type\\\":\\\"Snark\\\"}\"}", project_id, device_id, connect_count);
+    snprintf(payload, sizeof(payload), "{\"projectID\":%d,\"projectVersion\":\"0.1\",\"data\":\"{\\\"client_id\\\":\\\"%s\\\",\\\"connections\\\":%d, \\\"receipt_type\\\":\\\"Snark\\\"}\"}", project_id, client_id, connect_count);
     ESP_LOGI(TAG, "Payload: %s", payload); 
     char output_buffer[MAX_HTTP_OUTPUT_BUFFER] = {0};   // Buffer to store response of http request 
     int content_length = 0; 
