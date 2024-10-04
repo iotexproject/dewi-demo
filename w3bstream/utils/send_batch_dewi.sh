@@ -2,7 +2,7 @@
 
 # Path to your CSV file
 CSV_FILE=$1
-PROJECT_ID=74
+PROJECT_ID=884
 
 # Calculate the total number of lines to process (minus the header)
 TOTAL_LINES=$(($(wc -l < "$CSV_FILE") - 1))
@@ -16,7 +16,7 @@ tail -n +2 "$CSV_FILE" | while IFS=, read -r client_id connections; do
   ((CURRENT_LINE++))
 
   # Construct the JSON data
-  JSON_DATA="{\"client_id\":$client_id,\"connections\":$connections,\"receipt_type\":\"Snark\"}"
+  JSON_DATA="{\"client_id\":\"$client_id\",\"connections\":$connections,\"receipt_type\":\"Snark\"}"
   echo $JSON_DATA
 
   # Execute your command here, replace the actual JSON data with the constructed one
