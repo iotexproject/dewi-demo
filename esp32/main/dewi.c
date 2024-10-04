@@ -14,14 +14,15 @@ extern uint16_t connect_count;
 // Ref. Examples: https://github.com/iotexproject/ioConnect/tree/main/example/esp32
 const char* did_token = "eyJhbGciOiJFZERTQSIsImtpZCI6ImRpZDprZXk6ejZNa2pQMlBhMXBrVWd6MnJQNnlUWHBBVGU0cWQ3YWh3c0dBUXVVNjk3SnBjQ0xmI3o2TWtqUDJQYTFwa1VnejJyUDZ5VFhwQVRlNHFkN2Fod3NHQVF1VTY5N0pwY0NMZiJ9.eyJpc3MiOiJkaWQ6a2V5Ono2TWtqUDJQYTFwa1VnejJyUDZ5VFhwQVRlNHFkN2Fod3NHQVF1VTY5N0pwY0NMZiIsIm5iZiI6MTU5Nzg3MzMxMCwianRpIjoiaHR0cDovL2V4YW1wbGUub3JnL2NyZWRlbnRpYWxzLzM3MzEiLCJzdWIiOiJkaWQ6a2V5Ono2TWtlZUNoclVzMUVvS2tOTnpveTlGd0pKYjlnTlE5MlVUOGtjWFpITWJ3ajY3QiIsInZjIjp7IkBjb250ZXh0IjoiaHR0cHM6Ly93d3cudzMub3JnLzIwMTgvY3JlZGVudGlhbHMvdjEiLCJpZCI6Imh0dHA6Ly9leGFtcGxlLm9yZy9jcmVkZW50aWFscy8zNzMxIiwidHlwZSI6WyJWZXJpZmlhYmxlQ3JlZGVudGlhbCJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJpZCI6ImRpZDprZXk6ejZNa2VlQ2hyVXMxRW9La05Oem95OUZ3SkpiOWdOUTkyVVQ4a2NYWkhNYndqNjdCIn0sImlzc3VlciI6ImRpZDprZXk6ejZNa2pQMlBhMXBrVWd6MnJQNnlUWHBBVGU0cWQ3YWh3c0dBUXVVNjk3SnBjQ0xmIiwiaXNzdWFuY2VEYXRlIjoiMjAyMC0wOC0xOVQyMTo0MTo1MFoifX0.4dzsQ89P6A8NUy5qpdAohCbNRCRMnplrtiYaEpPvTeU9nzyrKGAPG-bQukI2Jzv2f289lWDx0fdWxWJjSgieDA";
 
-// The URL of the W3bstream sequencer
+// The URL of the DePIN data sequencer
 const char* url = "sprout-stress.w3bstream.com/message";
 
-// The W3bstream Project id as created in ioID
-// ioctl ioid register $PROJECT_NAME
+// The W3bstream Project id, as created in ioID
+// (e.g., "ioctl ioid register $PROJECT_NAME")
 const int project_id = 884;
 
-// The token contract address, used for DePIN infra incentives
+// The token contract address. This is the token used to
+// incentivise the device owner, and we show the balance of this token
 const char* token_contract = "0xB1f2d24F82e114bD44AF492E7ead45003DBb51d6";
 
 // The interval for sending updates
@@ -41,8 +42,8 @@ const char* client_id = "0";
 const char* ESP32_SSID = "DEPIN-AP-0"; 
 
 // Info for Device 1
-// const char* owner = "0xc7c415f50829c1f696fb7c16df3635262bf99193";
-// const char* owner_short = "0xc7c41..99193";
+// const char* owner = "0xf88826d211f4c4a6ea279f5a8f3f1387ea7271d3";
+// const char* owner_short = "0xf8882..271d3";
 // const char* client_id = "1";
 // const char* ESP32_SSID = "DEPIN-AP-1"; 
 
@@ -58,7 +59,7 @@ const char* ESP32_SSID = "DEPIN-AP-0";
 // const char* client_id = "3";
 // const char* ESP32_SSID = "DEPIN-AP-3"; 
 
-// Variables to store the connected clients
+// Variables to store the connected wifi clients
 connected_device_t connected_devices[MAX_CONNECTED_DEVICES];
 int num_connected_devices = 0;
 
@@ -209,7 +210,7 @@ void init_display()
 
 void update_display() 
 {
-    static uint64_t previous_balance = 0; 
+    static uint64_t previous_balance = -1; 
     uint64_t balance = get_erc20_balance();
 
     // Print the new balance if changed
