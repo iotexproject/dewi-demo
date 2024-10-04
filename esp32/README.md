@@ -27,6 +27,15 @@ We have designed a simple protocol to facilitate communication between the route
 
 ## Setting up your environment
 
+### Configure the example
+
+Open the `main/dewi.c` replace the values of the following constants with your own ones:
+
+- `char* did_token`: the token used for DID authentication
+- `char* url`: the URL of the node
+- `const int project_id`: the project id
+- `const char* token_contract`: the ERC20 token contract address
+
 ### ESP-IDF installation
 First, install the ESP-IDF (Espressif IoT Development Framework) using the guidelines provided by Espressif. Follow the steps outlined here for the installation process: https://docs.espressif.com/projects/esp-idf/en/v5.1.2/esp32/get-started/linux-macos-setup.html
 
@@ -65,8 +74,7 @@ Just copy past the command in the log window after the board booted the firmware
 Replace YOUR_WIFI_SSID and YOUR_WIFI_PASSWORD with your actual WiFi details.
 
 ### Testing
-Once configured, you should be able to connect a client device to the board's WiFi. The router will then provide internet access via your home network while sending "proofs of connectivity" to the W3bstream sequences. You can configure more into the firmware:
+Once configured, you should be able to connect a client device to the board's WiFi. The router will then provide internet access via your home network while sending "proofs of connectivity" to the W3bstream sequences.
 
-<img width="1107" alt="image" src="https://github.com/machinefi/iotex-dewi-demo/assets/11096047/5f9cf0cb-07a5-4aba-b291-a7e647c31ab1">
-
-
+The firmware will send a message periodically with the number of connected devices. The logs should display the message payload.  
+The logs should display the message id if the messe is sent successfully, or an error message.
