@@ -26,7 +26,6 @@
 #include "freertos/event_groups.h"
 #include "esp_wifi.h"
 #include "esp_eap_client.h"
-#include "esp_tls.h"
 
 
 #include "lwip/opt.h"
@@ -46,7 +45,10 @@
 
 #include "router_globals.h"
 
+/* Start - DeWi Demo Inclusions */
+#include "esp_tls.h"
 #include "dewi.h"
+/* End - DeWi Demo Inclusions */
 
 // On board LED
 #if defined(CONFIG_IDF_TARGET_ESP32S3)
@@ -386,6 +388,8 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
     {
         wifi_event_ap_staconnected_t* event = (wifi_event_ap_staconnected_t*) event_data;
         connect_count++;
+
+        /* START - DEWI DEMO CHANGES */
         ESP_LOGI(TAG,"New client connected with MAC: %02x:%02x:%02x:%02x:%02x:%02x", 
             event->mac[0], event->mac[1], event->mac[2],
             event->mac[3], event->mac[4], event->mac[5]);
@@ -424,6 +428,8 @@ static void wifi_event_handler(void* arg, esp_event_base_t event_base,
                 break;
             }
         }
+        /* END - DEWI DEMO CHANGES */
+
     }
 }
 

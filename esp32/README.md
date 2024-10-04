@@ -1,29 +1,46 @@
 # ESP32 NAT Router modified to support W3bstream
 
-Our firmware for ESP32 boards is built upon the original firmware by [martin-ger](https://github.com/martin-ger/esp32_nat_router), focusing on incorporating W3bstream's messaging protocol. The core additions are made in the esp32_nat_router.c file within the project's main directory.
+Our firmware for ESP32 boards is built upon the original firmware by [martin-ger](https://github.com/martin-ger/esp32_nat_router) (specifically, [on this commit](https://github.com/martin-ger/esp32_nat_router/tree/f44c8794cb7ef59bb2602937131a8177ee6f22e5)), focusing on incorporating IoTeX's device identity protocol (ioID) and implementing a messaging protocol to communicate the online status and WiFi clients count to the DePIN Dapp that will distribute the incentives. 
 
-## W3bstream integration overview
-We have designed a simple protocol to facilitate communication between the router and W3bstream. Each router is assigned a unique device ID and sends a heartbeat message every 7 seconds. This message confirms the device's operation and includes the count of connected clients as a measure of the router's activity. Here's an example of a message format:
+The core additions are made in the `dewi.c` file, within the project's main directory. The original `esp32_nat_router.c` is modified to import `dewi.h` and to store the info on connceted WiFi clients inside the `wifi_event_handler`, specifically within the `WIFI_EVENT_AP_STACONNECTED` and `WIFI_EVENT_AP_STADISCONNECTED` events.  
+
+## Overview of the protocol
+
+We have designed a simple protocol to facilitate communication between the ESP32 access point and a so called "Data Sequencer Service". The Data Sequencer service then validates and packs together data messages into *W3bstream Tasks* for our W3bstream logic to process them and compute a "work score" for each device. 
+
+So, each ESP32 utilizes ioConnect and ioID to generate and self-assign unique *DID*, which is used by the device owner to register the device on the IoTeX blockchain. ESP32s send a heartbeat message in slots of a few seconds. This message confirms the device's operation (*proof of liveness*)  and it includes the count of connected clients as a measure of the router's activity in that slot and signs the message with it's DID private key. Here's an example of a message format:
 
 ```json
 { 
-  "projectID": 33,
+  "projectID": 123,
   "projectVersion": "0.1",
   "data": {
     "client_id": "1",
     "connections": 3,
-    "receipt_type": "Snark"
-  }
+  },
+  "Signature": "0xb635...03a26d4d900"
 }
 ```
 
 ## Key Points
-- **ProjectID** and **projectVersion** align with W3bstream's messaging protocol.
-  
-- **Data**: Contains the actual message, including device ID and connections count.
-  
-- **Note**:  Currently, W3bstream does not support the concept of device IDs within its protocol, meaning that no device authentication or data integrity checks are performed by W3bstream nodes. Although we include the Device ID within the message payload for later processing in the prover, practical device authentication by ZK is not feasible, and thus, this feature has been omitted. Leveraging the flexibility of the Risc Zero proving framework, we extract device IDs in the prover's result and use them on-chain to find the device owner. However, it's important to note that no digital signatures on the data messages are utilized at any point.
 
+- **ProjectID** is the ID of our W3bstream project (registered on the IoTeX chain using ioID)
+- **projectVersion** is the specific version of the W3bstream code the message was intended for.  
+- **Data**: Contains the actual data sent by the device: the number of unique WiFi clients connected in the slot (for deviceID, see below).
+  
+## Features
+
+Not all the features have been implemeted yet. BElow is an overview:
+
+- [x] Compute the number of uniquely connected WiFi clients
+- [x] Store the info and connection time for each WiFi client
+- [x] Send the message on every slot to the data sequencer
+- [ ] Integrate ioConnect for DID generation
+- [ ] Implement ioID device registration (*)
+- [ ] Implement message signature
+- [ ] Improve the message protocol with timestamp
+
+(*) At this moment, we ioID is not integrated yet. We simply included a unique `client_id` in the `data` field; on-chain, that id represents an NFT and whoever owns that NFT is considered the **owner** of the device and receive the rewards. Nevertheless, ioID must be implemented to register a certain project's devices on chain, and authenticate them when a message is received (e.g. by means of a message signature or using ioConnect's DID authentication features).
 
 ## Setting up your environment
 
