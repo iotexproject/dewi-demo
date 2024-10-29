@@ -17,6 +17,7 @@ contract Dapp is IDapp {
     IRisc0Receiver public risc0Verifier;
     IioIDStore public ioIDStore;
     address public ioID;
+    bytes32 public imageId;
 
     mapping(uint256 => bytes32) private projectIdToImageId;
 
@@ -27,11 +28,12 @@ contract Dapp is IDapp {
         ioIDStore = IioIDStore(_ioIDStore);
     }
 
-    function process(uint256 _projectId, uint256, string memory, bytes calldata _data) external {
+    function process(uint256 _projectId, bytes32, address, address, bytes calldata _data) external {
         require(address(risc0Verifier) != address(0), "Verifier not set");
 
-        bytes32 imageId = projectIdToImageId[_projectId];
-        require(imageId != bytes32(0), "Image not found");
+        if (imageId == bytes32(0)) {
+            revert("Image not found");
+        }
 
         (bytes memory seal, bytes memory journal) = _decodeData(_data);
         _verify(seal, imageId, journal);
@@ -44,12 +46,8 @@ contract Dapp is IDapp {
         risc0Verifier = IRisc0Receiver(_receiver);
     }
 
-    function setProjectIdToImageId(uint256 _projectId, bytes32 _imageId) public {
-        projectIdToImageId[_projectId] = _imageId;
-    }
-
-    function getImageIdByProjectId(uint256 _projectId) public view returns (bytes32) {
-        return projectIdToImageId[_projectId];
+    function setImageId(bytes32 _imageId) public {
+        imageId = _imageId;
     }
 
     function _decodeData(bytes memory _data) internal pure returns (bytes memory, bytes memory) {
