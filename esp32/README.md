@@ -5,8 +5,7 @@ Our firmware for ESP32 boards is built upon the original firmware by [martin-ger
 The core additions are made in the `dewi.c` file, within the project's main directory. The original `esp32_nat_router.c` is modified to import `dewi.h` and to store the info on connceted WiFi clients inside the `wifi_event_handler`, specifically within the `WIFI_EVENT_AP_STACONNECTED` and `WIFI_EVENT_AP_STADISCONNECTED` events.  
 
 ## Overview of the protocol
-![image](https://github.com/user-attachments/assets/99b12b36-020c-4416-a3b8-d6fcc7910488)
-
+![image](https://github.com/user-attachments/assets/ffbe3c4c-13e4-437e-9ee3-6dbf702c1552)
 
 We have designed a simple protocol to facilitate communication between the ESP32 access point and an API service. The API service has the role of validating and packing together data messages into *W3bstream Tasks* and submitting them to W3bstream. We deployed a specific ZK logic to W3bstream to process data and compute a "work score" for each device. 
 
