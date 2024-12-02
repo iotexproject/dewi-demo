@@ -7,8 +7,9 @@ import { IMAGE_ID, IMAGE_ID_2, RAW_DATA } from './testData';
 import { IOID } from '../constants';
 
 const PROJECT_1_ID = '0x036c';
-const PROVER_1_ID = '0x01';
-const CLIENT_1_ID = '';
+const TASK_1_ID = ethers.randomBytes(32);
+const PROVER_1 = ethers.ZeroAddress;
+const DEVICE_ID = ethers.ZeroAddress;
 const REWARDS_AMOUNT = 4; // UPDATE IF THE VALUE IN JOURNAL CHANGES
 
 describe('Dapp', function () {
@@ -55,17 +56,17 @@ describe('Dapp', function () {
       expect(await dapp.risc0Verifier()).to.eq(RISC0_VERIFIER_2);
     });
     it('should set and get projectImageId', async () => {
-      await dapp.setProjectIdToImageId(PROJECT_1_ID, IMAGE_ID);
+      await dapp.setImageId(IMAGE_ID);
 
-      expect(await dapp.getImageIdByProjectId(PROJECT_1_ID)).to.eq(IMAGE_ID.toLowerCase());
+      expect(await dapp.imageId()).to.eq(IMAGE_ID.toLowerCase());
     });
   });
   describe('Verification', () => {
     it('should emit verified event', async () => {
       const [sender] = await ethers.getSigners();
 
-      await dapp.setProjectIdToImageId(PROJECT_1_ID, IMAGE_ID);
-      await expect(dapp.process(PROJECT_1_ID, PROVER_1_ID, CLIENT_1_ID, RAW_DATA))
+      await dapp.setImageId(IMAGE_ID);
+      await expect(dapp.process(PROJECT_1_ID, TASK_1_ID, PROVER_1, DEVICE_ID, RAW_DATA))
         .to.emit(dapp, 'ProofVerified')
         .withArgs(
           sender.address,
@@ -74,9 +75,9 @@ describe('Dapp', function () {
         );
     });
     it('should revert if imageId is invalid', async () => {
-      await dapp.setProjectIdToImageId(PROJECT_1_ID, IMAGE_ID_2);
+      await dapp.setImageId(IMAGE_ID_2);
       const verifierContract = await ethers.getContractAt('RiscZeroGroth16Verifier', verifier);
-      await expect(dapp.process(PROJECT_1_ID, PROVER_1_ID, CLIENT_1_ID, RAW_DATA)).to.be.revertedWithCustomError(
+      await expect(dapp.process(PROJECT_1_ID, TASK_1_ID, PROVER_1, DEVICE_ID, RAW_DATA)).to.be.revertedWithCustomError(
         verifierContract,
         'VerificationFailed',
       );
@@ -84,24 +85,24 @@ describe('Dapp', function () {
     it('should not process if verifier not set yet', async () => {
       await dapp.setReceiver(ethers.ZeroAddress);
 
-      await expect(dapp.process(PROJECT_1_ID, PROVER_1_ID, CLIENT_1_ID, RAW_DATA)).to.be.revertedWith(
+      await expect(dapp.process(PROJECT_1_ID, TASK_1_ID, PROVER_1, DEVICE_ID, RAW_DATA)).to.be.revertedWith(
         'Verifier not set',
       );
     });
     it('should revert if project image id not found', async () => {
-      await expect(dapp.process(PROJECT_1_ID, PROVER_1_ID, CLIENT_1_ID, RAW_DATA)).to.be.rejectedWith(
+      await expect(dapp.process(PROJECT_1_ID, TASK_1_ID, PROVER_1, DEVICE_ID, RAW_DATA)).to.be.rejectedWith(
         'Image not found',
       );
     });
   });
   describe('Rewards distribution', () => {
     beforeEach(async () => {
-      await dapp.setProjectIdToImageId(PROJECT_1_ID, IMAGE_ID);
+      await dapp.setImageId(IMAGE_ID);
     });
     it('should mint tokens to the device owner', async () => {
       const [, deviceOwner] = await ethers.getSigners();
 
-      await dapp.process(PROJECT_1_ID, PROVER_1_ID, CLIENT_1_ID, RAW_DATA);
+      await dapp.process(PROJECT_1_ID, TASK_1_ID, PROVER_1, DEVICE_ID, RAW_DATA);
       expect(await rewards.balanceOf(deviceOwner)).to.eq(REWARDS_AMOUNT);
     });
   });
@@ -120,11 +121,11 @@ describe('Distribution reverts', () => {
     const MINTER_ROLE = await rewards.MINTER_ROLE();
     await rewards.grantRole(MINTER_ROLE, dapp);
 
-    await dapp.setProjectIdToImageId(PROJECT_1_ID, IMAGE_ID);
+    await dapp.setImageId(IMAGE_ID);
   });
 
   it('should revert if project device contract not set', async () => {
-    await expect(dapp.process(PROJECT_1_ID, PROVER_1_ID, CLIENT_1_ID, RAW_DATA)).to.be.rejectedWith(
+    await expect(dapp.process(PROJECT_1_ID, TASK_1_ID, PROVER_1, DEVICE_ID, RAW_DATA)).to.be.rejectedWith(
       'Device Contract not set',
     );
   });
